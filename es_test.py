@@ -1,9 +1,8 @@
 from elasticsearch import Elasticsearch
 
 es = Elasticsearch("http://localhost:9200")
-print(es.info()["version"]["number"])   # check connection
+print(es.info()["version"]["number"])
 
-# store 3 docs
 docs = [
     {"title": "Intro to Python", "text": "Python is a popular language for AI and data science."},
     {"title": "What is Docker", "text": "Docker runs apps inside containers."},
@@ -13,9 +12,8 @@ docs = [
 for i, doc in enumerate(docs, start=1):
     es.index(index="my-docs", id=i, document=doc)
 
-es.indices.refresh(index="my-docs")   # make docs searchable now
+es.indices.refresh(index="my-docs")
 
-# keyword search
 res = es.search(index="my-docs", query={"match": {"text": "containers"}})
 
 for hit in res["hits"]["hits"]:
